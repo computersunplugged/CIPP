@@ -5192,6 +5192,39 @@
     "recommendedBy": ["Microsoft"]
   },
   {
+  "name": "standards.NinjaCveSync",
+  "cat": "Defender Standards",
+  "tag": ["Security"],
+  "helpText": "Uploads Defender TVM vulnerabilities to a NinjaOne scan group.",
+  "docsDescription": "Fetches Defender TVM device–CVE data and uploads it to a NinjaOne scan group via CSV.",
+  "executiveText": "Keeps NinjaOne updated with CVEs detected by Microsoft Defender.",
+  "label": "Sync Defender CVEs to NinjaOne",
+  "impact": "Low Impact",
+  "impactColour": "info",
+  "addedDate": "2025-11-12",
+  "recommendedBy": ["CIPP"],
+  "addedComponent": [
+    {
+      "type": "textField",
+      "name": "standards.NinjaCveSync.ScanGroupId",
+      "label": "Ninja Scan Group ID",
+      "required": false
+    },
+    {
+      "type": "select",
+      "multiple": false,
+      "creatable": false,
+      "label": "Device Identifier Column",
+      "name": "standards.NinjaCveSync.DeviceIdentifier",
+      "options": [
+        { "label": "hostname",  "value": "hostname"  },
+        { "label": "ipAddress", "value": "ipAddress" },
+        { "label": "macAddress","value": "macAddress"}
+      ]
+    }
+  ]
+},
+  {
     "name": "standards.DeployCheckChromeExtension",
     "cat": "Intune Standards",
     "tag": [],
