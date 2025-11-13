@@ -5207,20 +5207,8 @@
     {
       "type": "textField",
       "name": "standards.NinjaCveSync.ScanGroupId",
-      "label": "Ninja Scan Group ID",
-      "required": false
-    },
-    {
-      "type": "select",
-      "multiple": false,
-      "creatable": false,
-      "label": "Device Identifier Column",
-      "name": "standards.NinjaCveSync.DeviceIdentifier",
-      "options": [
-        { "label": "hostname",  "value": "hostname"  },
-        { "label": "ipAddress", "value": "ipAddress" },
-        { "label": "macAddress","value": "macAddress"}
-      ]
+      "label": "NinjaOne Scan Group ID",
+      "required": true
     }
   ]
 },
