@@ -5212,7 +5212,7 @@
     },
     {
       "type": "textField",
-      "helpText": "Enter Your NinjaOne Instance Host Name (e.g. app.ninjarmm.com)"
+      "helpText": "Enter Your NinjaOne Instance Host Name (e.g. app.ninjarmm.com)",
       "name": "standards.NinjaCveSync.InstanceHost",
       "label": "NinjaOne Instance Host Name",
       "required": true
