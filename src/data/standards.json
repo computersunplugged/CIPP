@@ -5206,16 +5206,9 @@
   "addedComponent": [
     {
       "type": "textField",
-      "name": "standards.NinjaCveSync.ScanGroupId",
-      "label": "NinjaOne Scan Group ID",
-      "required": true
-    },
-    {
-      "type": "textField",
-      "helpText": "Enter Your NinjaOne Instance Host Name (e.g. app.ninjarmm.com)",
-      "name": "standards.NinjaCveSync.InstanceHost",
-      "label": "NinjaOne Instance Host Name",
-      "required": true
+      "name": "standards.NinjaCveSync.ScanGroupPrefix",
+      "label": "Scan Group Name Prefix (e.g., CIPP-)",
+      "required": false
     }
   ]
 },
