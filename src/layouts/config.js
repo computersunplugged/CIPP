@@ -319,11 +319,6 @@ export const nativeMenuItems = [
             path: "/security/defender/list-defender-tvm",
             permissions: ["Security.Alert.*"],
           },
-          {
-            title: 'Vulnerability Management',
-            path: '/security/defender/vulnerability-management',
-            permissions: ["Security.Alert.*"],
-          },
         ],
       },
       {
