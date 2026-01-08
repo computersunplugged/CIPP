@@ -5,7 +5,6 @@ import CippFormComponent from "./CippFormComponent";
 import { ApiGetCall } from "../../api/ApiCall";
 import { useDialog } from "../../hooks/use-dialog";
 import { CippApiDialog } from "./CippApiDialog";
-import { useFormState } from "react-hook-form";
 
 export const CippNotificationForm = ({
   formControl,
@@ -19,8 +18,6 @@ export const CippNotificationForm = ({
     url: "/api/ListNotificationConfig",
     queryKey: "ListNotificationConfig",
   });
-
-  const formState = useFormState({ control: formControl.control });
 
   // Define log types and severity types
   const logTypes = [
@@ -85,7 +82,6 @@ export const CippNotificationForm = ({
               label="Email Addresses (Comma separated)"
               name="email"
               formControl={formControl}
-              helperText="Enter one or more email addresses to receive notifications."
             />
           </Grid>
           <Grid size={{ xs: 12 }}>
@@ -95,7 +91,6 @@ export const CippNotificationForm = ({
               label="Webhook URL"
               name="webhook"
               formControl={formControl}
-              helperText="Enter the webhook URL to send notifications to. The URL should be configured to receive a POST request."
             />
           </Grid>
           <Grid size={{ xs: 12 }}>
@@ -139,11 +134,7 @@ export const CippNotificationForm = ({
           </Grid>
           {showTestButton && (
             <Grid size={{ xs: 12 }}>
-              <Button
-                variant="outlined"
-                onClick={notificationDialog.handleOpen}
-                disabled={formState.isDirty}
-              >
+              <Button variant="outlined" onClick={notificationDialog.handleOpen}>
                 Send Test Alert
               </Button>
             </Grid>
@@ -188,7 +179,6 @@ export const CippNotificationForm = ({
               text: "This is a test from Notification Settings",
             }),
           }}
-          allowResubmit={true}
         />
       )}
     </>

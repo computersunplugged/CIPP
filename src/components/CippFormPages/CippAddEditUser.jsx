@@ -717,14 +717,6 @@ const CippAddEditUser = (props) => {
                   name="postExecution.psa"
                   formControl={formControl}
                 />
-                <CippFormComponent
-                  type="textField"
-                  fullWidth
-                  label="Reference"
-                  name="reference"
-                  placeholder="Enter a reference that will be added to the notification title"
-                  formControl={formControl}
-                />
               </Grid>
             </CippFormCondition>
           </Grid>

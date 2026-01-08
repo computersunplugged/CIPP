@@ -5,7 +5,7 @@ import { CippOffCanvas } from "../CippComponents/CippOffCanvas";
 import { useState } from "react";
 import { getCippTranslation } from "/src/utils/get-cipp-translation";
 
-export const CippBackendCard = ({ backendComponents, item, hosted }) => {
+export const CippBackendCard = ({ backendComponents, item }) => {
   const [open, setOpen] = useState(false);
 
   const BackendButton = () => {
@@ -30,7 +30,7 @@ export const CippBackendCard = ({ backendComponents, item, hosted }) => {
             variant="contained"
             size="small"
             onClick={() => setOpen(true)}
-            disabled={backendComponents.isFetching || hosted}
+            disabled={backendComponents.isFetching}
             startIcon={
               item.offcanvasIcon ? <SvgIcon fontSize="small">{item.offcanvasIcon}</SvgIcon> : ""
             }

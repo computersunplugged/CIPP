@@ -30,7 +30,7 @@ import {
 } from "@mui/icons-material";
 import { Grid } from "@mui/system";
 import CippFormComponent from "/src/components/CippComponents/CippFormComponent";
-import { useWatch, useFormState } from "react-hook-form";
+import { useWatch } from "react-hook-form";
 import _ from "lodash";
 import Microsoft from "../../icons/iconly/bulk/microsoft";
 import Azure from "../../icons/iconly/bulk/azure";
@@ -107,8 +107,6 @@ const CippStandardAccordion = ({
   const watchedValues = useWatch({
     control: formControl.control,
   });
-
-  const { errors: formErrors } = useFormState({ control: formControl.control });
 
   // Watch all trackDrift values for all standards at once
   const allTrackDriftValues = useWatch({
@@ -570,19 +568,19 @@ const CippStandardAccordion = ({
               if (templateList && templateList.label) {
                 templateDisplayName = templateList.label;
               }
-
+              
               // Check for TemplateList-Tags selection (takes priority)
               const templateListTags = _.get(watchedValues, `${standardName}.TemplateList-Tags`);
               if (templateListTags && templateListTags.label) {
                 templateDisplayName = templateListTags.label;
               }
             }
-
+            
             // For multiple standards, check the first added component
             const selectedTemplateName = standard.multiple
               ? _.get(watchedValues, `${standardName}.${standard.addedComponent?.[0]?.name}`)
               : "";
-
+            
             // Build accordion title with template name if available
             const accordionTitle = templateDisplayName
               ? `${standard.label} - ${templateDisplayName}`
@@ -676,16 +674,11 @@ const CippStandardAccordion = ({
             const hasAction =
               actionValue && (!Array.isArray(actionValue) || actionValue.length > 0);
 
-            // Check if this standard has any validation errors
-            const standardErrors = _.get(formErrors, standardName);
-            const hasValidationErrors = standardErrors && Object.keys(standardErrors).length > 0;
-
             // Allow saving if:
             // 1. Action is selected if required
             // 2. All required fields are filled
             // 3. There are unsaved changes
-            // 4. No validation errors
-            const canSave = hasAction && requiredFieldsFilled && hasUnsaved && !hasValidationErrors;
+            const canSave = hasAction && requiredFieldsFilled && hasUnsaved;
 
             return (
               <Card key={standardName} sx={{ mb: 2 }}>

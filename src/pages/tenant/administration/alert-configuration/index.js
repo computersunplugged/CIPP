@@ -2,7 +2,8 @@ import { Button } from "@mui/material";
 import { CippTablePage } from "/src/components/CippComponents/CippTablePage.jsx";
 import { Layout as DashboardLayout } from "/src/layouts/index.js"; // had to add an extra path here because I added an extra folder structure. We should switch to absolute pathing so we dont have to deal with relative.
 import Link from "next/link";
-import { CopyAll, Delete, Edit, NotificationAdd, Visibility } from "@mui/icons-material";
+import { EyeIcon } from "@heroicons/react/24/outline";
+import { CopyAll, Delete, NotificationAdd } from "@mui/icons-material";
 
 const Page = () => {
   const pageTitle = "Alerts";
@@ -10,13 +11,13 @@ const Page = () => {
     {
       label: "View Task Details",
       link: "/cipp/scheduler/task?id=[RowKey]",
-      icon: <Visibility />,
+      icon: <EyeIcon />,
       condition: (row) => row?.EventType === "Scheduled Task",
     },
     {
       label: "Edit Alert",
       link: "/tenant/administration/alert-configuration/alert?id=[RowKey]",
-      icon: <Edit />,
+      icon: <EyeIcon />,
       color: "success",
       target: "_self",
     },

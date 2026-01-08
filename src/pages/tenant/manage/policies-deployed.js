@@ -353,8 +353,6 @@ const PoliciesDeployedPage = () => {
 
   const actions = createDriftManagementActions({
     templateId,
-    templateType: currentTemplate?.type || "classic",
-    showEditTemplate: true,
     onRefresh: () => {
       standardsApi.refetch();
       comparisonApi.refetch();
@@ -405,7 +403,7 @@ const PoliciesDeployedPage = () => {
       subtitle={subtitle}
       actions={actions}
       actionsData={{}}
-      backUrl="/tenant/standards"
+      backUrl="/tenant/standards/list-standards"
     >
       <CippHead title="Policies and Settings Deployed" />
       <Box sx={{ py: 2 }}>

@@ -156,7 +156,6 @@ export const getCippFormatting = (data, cellName, type, canReceive, flatten = tr
     "ExecutedTime",
     "ScheduledTime",
     "Timestamp",
-    "timestamp",
     "DateTime",
     "LastRun",
     "LastRefresh",

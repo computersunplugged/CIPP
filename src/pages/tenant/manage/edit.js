@@ -22,8 +22,7 @@ const Page = () => {
   const router = useRouter();
   const { templateId } = router.query;
   const settings = useSettings();
-  // Prioritize URL query parameter, then fall back to settings
-  const currentTenant = router.query.tenantFilter || settings.currentTenant;
+  const currentTenant = settings.currentTenant;
 
   const formControl = useForm({
     mode: "onChange",

@@ -28,9 +28,7 @@ const RecoverPoliciesPage = () => {
   const router = useRouter();
   const { templateId } = router.query;
   const [selectedPolicies, setSelectedPolicies] = useState([]);
-  const userSettings = useSettings();
-  // Prioritize URL query parameter, then fall back to settings
-  const currentTenant = router.query.tenantFilter || userSettings.currentTenant;
+  const currentTenant = useSettings().currentTenant;
 
   const formControl = useForm({ mode: "onChange" });
 

@@ -122,11 +122,8 @@ export const CippApiDialog = (props) => {
   const handleActionClick = (row, action, formData) => {
     setIsFormSubmitted(true);
     let finalData = {};
-    let isBulkRequest = false;
     if (typeof api?.customDataformatter === "function") {
       finalData = api.customDataformatter(row, action, formData);
-      // If customDataformatter returns an array, enable bulk request mode
-      isBulkRequest = Array.isArray(finalData);
     } else {
       if (action.multiPost === undefined) action.multiPost = false;
 
@@ -204,7 +201,7 @@ export const CippApiDialog = (props) => {
     if (action.type === "POST") {
       actionPostRequest.mutate({
         url: action.url,
-        bulkRequest: isBulkRequest,
+        bulkRequest: false,
         data: finalData,
       });
     } else if (action.type === "GET") {
@@ -212,7 +209,7 @@ export const CippApiDialog = (props) => {
         url: action.url,
         waiting: true,
         queryKey: Date.now(),
-        bulkRequest: isBulkRequest,
+        bulkRequest: false,
         data: finalData,
       });
     }

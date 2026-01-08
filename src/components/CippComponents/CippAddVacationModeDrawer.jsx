@@ -28,8 +28,6 @@ export const CippAddVacationModeDrawer = ({
       PolicyId: null,
       startDate: null,
       endDate: null,
-      reference: null,
-      postExecution: [],
       excludeLocationAuditAlerts: false,
     },
   });
@@ -87,8 +85,6 @@ export const CippAddVacationModeDrawer = ({
         PolicyId: null,
         startDate: null,
         endDate: null,
-        reference: null,
-        postExecution: [],
         excludeLocationAuditAlerts: false,
       });
     }
@@ -109,8 +105,6 @@ export const CippAddVacationModeDrawer = ({
       StartDate: formData.startDate,
       EndDate: formData.endDate,
       vacation: true,
-      reference: formData.reference || null,
-      postExecution: formData.postExecution || [],
       excludeLocationAuditAlerts: formData.excludeLocationAuditAlerts || false,
     };
 
@@ -130,8 +124,6 @@ export const CippAddVacationModeDrawer = ({
       PolicyId: null,
       startDate: null,
       endDate: null,
-      reference: null,
-      postExecution: [],
     });
   };
 
@@ -301,33 +293,6 @@ export const CippAddVacationModeDrawer = ({
                     return true;
                   },
                 }}
-              />
-            </Grid>
-
-            {/* Post Execution Actions */}
-            <Grid size={{ md: 12, xs: 12 }}>
-              <CippFormComponent
-                type="autoComplete"
-                name="postExecution"
-                label="Post Execution Actions"
-                formControl={formControl}
-                multiple
-                creatable={false}
-                options={[
-                  { label: "Webhook", value: "Webhook" },
-                  { label: "Email", value: "Email" },
-                  { label: "PSA", value: "PSA" },
-                ]}
-              />
-            </Grid>
-
-            <Grid size={{ xs: 12 }}>
-              <CippFormComponent
-                type="textField"
-                label="Reference"
-                name="reference"
-                formControl={formControl}
-                placeholder="Optional note to help identify this vacation schedule, this is also added to notification titles."
               />
             </Grid>
             {policyHasLocationTarget && (

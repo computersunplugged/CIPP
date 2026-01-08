@@ -15,7 +15,6 @@ const Page = () => {
     "CoveredByCA",
     "MFAMethods",
     "CAPolicies",
-    "IsAdmin",
   ];
   const filters = [
     {
@@ -45,11 +44,6 @@ const Page = () => {
       value: [{ id: "MFARegistration", value: "Yes" }],
       type: "column",
     },
-    {
-      filterName: "Admin Users",
-      value: [{ id: "IsAdmin", value: "Yes" }],
-      type: "column"
-    }
   ];
 
   const actions = [

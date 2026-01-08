@@ -77,7 +77,6 @@ const Page = () => {
           "Command",
           "Parameters",
           "PostExecution",
-          "Reference",
           "Recurrence",
           "Results",
         ]}

@@ -27,7 +27,7 @@ import { useState } from "react";
 import { Close } from "@mui/icons-material";
 
 const Page = () => {
-  const pageTitle = "Automated Onboarding";
+  const pageTitle = "Automated onboarding";
   const [testRunning, setTestRunning] = useState(false);
   const [correlationId, setCorrelationId] = useState(null);
   const [validateRunning, setValidateRunning] = useState(false);
@@ -106,7 +106,6 @@ const Page = () => {
   useEffect(() => {
     if (listSubscription.isSuccess && listEventTypes.isSuccess) {
       formControl.reset({
-        enabled: listSubscription?.data?.Results?.enabled ?? false,
         EventType: listSubscription?.data?.Results?.webhookEvents?.map((eventType) => {
           var event = listEventTypes?.data?.Results?.find((event) => event === eventType);
           return { label: event, value: event };
@@ -119,7 +118,6 @@ const Page = () => {
   return (
     <CippFormPage
       title={pageTitle}
-      hideTitle={true}
       hideBackButton={true}
       hidePageType={true}
       allowResubmit={true}
@@ -155,15 +153,6 @@ const Page = () => {
             isFetching={listSubscription.isFetching}
             propertyItems={[
               {
-                label: "Status",
-                value: (
-                  <Chip
-                    color={listSubscription?.data?.Results?.enabled ? "success" : "default"}
-                    label={listSubscription?.data?.Results?.enabled ? "Enabled" : "Disabled"}
-                  />
-                ),
-              },
-              {
                 label: "Webhook URL",
                 value: <CippCodeBlock code={listSubscription?.data?.Results?.webhookUrl} />,
                 sx: { pl: 0 },
@@ -177,14 +166,6 @@ const Page = () => {
             ]}
             layout="double"
             showDivider={false}
-          />
-        </Grid>
-        <Grid size={{ md: 12, xs: 12 }}>
-          <CippFormComponent
-            type="switch"
-            label="Enable Automated Onboarding"
-            name="enabled"
-            formControl={formControl}
           />
         </Grid>
         <Grid size={{ md: 12, xs: 12 }}>
