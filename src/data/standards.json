@@ -5595,6 +5595,27 @@
     "powershellEquivalent": "Set-OwaMailboxPolicy -Identity \"OwaMailboxPolicy-Default\" -ConditionalAccessPolicy ReadOnlyPlusAttachmentsBlocked",
     "recommendedBy": ["Microsoft Zero Trust", "CIPP"]
   },
+   {
+  "name": "standards.NinjaCveSync",
+  "cat": "Defender Standards",
+  "tag": ["Security"],
+  "helpText": "Uploads Defender TVM vulnerabilities to a NinjaOne scan group.",
+  "docsDescription": "Fetches Defender TVM device–CVE data and uploads it to a NinjaOne scan group via CSV.",
+  "executiveText": "Keeps NinjaOne updated with CVEs detected by Microsoft Defender.",
+  "label": "Sync Defender CVEs to NinjaOne",
+  "impact": "Low Impact",
+  "impactColour": "info",
+  "addedDate": "2025-11-12",
+  "recommendedBy": ["CIPP"],
+  "addedComponent": [
+    {
+      "type": "textField",
+      "name": "standards.NinjaCveSync.ScanGroupPrefix",
+      "label": "Scan Group Name Prefix (e.g., CIPP-)",
+      "required": false
+    }
+   ]
+  },
   {
     "name": "standards.LegacyEmailReportAddins",
     "deprecated": true,
