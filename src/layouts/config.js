@@ -315,7 +315,7 @@ export const nativeMenuItems = [
           },
         ],
       },
-      {
+            {
         title: "Defender",
         permissions: ["Security.Alert.*"],
         items: [
@@ -332,6 +332,11 @@ export const nativeMenuItems = [
           {
             title: "Vulnerabilities",
             path: "/security/defender/list-defender-tvm",
+            permissions: ["Security.Alert.*"],
+          },
+          {
+            title: "CVE Management",
+            path: "/security/defender/defender-cve-exceptions",
             permissions: ["Security.Alert.*"],
           },
         ],
