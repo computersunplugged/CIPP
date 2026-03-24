@@ -1,4 +1,3 @@
-import NinjaOneCveSyncSettings from "../../../components/CippIntegrations/NinjaOneCveSyncSettings";
 import { CippNinjaCveSyncScheduleDrawer } from "../../../components/CippComponents/CippNinjaCveSyncScheduleDrawer.jsx";
 import {
   Alert,
@@ -246,10 +245,7 @@ const Page = () => {
                 <CippIntegrationSettings>
                   {extension?.id === "NinjaOne" && (
                     <Box sx={{ mt: 3 }}>
-                      <NinjaOneCveSyncSettings />
-                      <Box sx={{ mt: 2 }}>
-                        <CippNinjaCveSyncScheduleDrawer />
-                      </Box>
+                      <CippNinjaCveSyncScheduleDrawer />
                     </Box>
                   )}
                 </CippIntegrationSettings>
