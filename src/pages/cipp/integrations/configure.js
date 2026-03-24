@@ -1,3 +1,5 @@
+import NinjaOneCveSyncSettings from "../../../components/CippIntegrations/NinjaOneCveSyncSettings";
+import { CippNinjaCveSyncScheduleDrawer } from "../../../components/CippComponents/CippNinjaCveSyncScheduleDrawer.jsx";
 import {
   Alert,
   Box,
@@ -241,7 +243,16 @@ const Page = () => {
               {extension?.id === "cippapi" ? (
                 <CippApiClientManagement />
               ) : (
-                <CippIntegrationSettings />
+                <CippIntegrationSettings>
+                  {extension?.id === "NinjaOne" && (
+                    <Box sx={{ mt: 3 }}>
+                      <NinjaOneCveSyncSettings />
+                      <Box sx={{ mt: 2 }}>
+                        <CippNinjaCveSyncScheduleDrawer />
+                      </Box>
+                    </Box>
+                  )}
+                </CippIntegrationSettings>
               )}
             </CippCardTabPanel>
 
