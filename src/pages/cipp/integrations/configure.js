@@ -1,15 +1,19 @@
-import { CippNinjaCveSyncScheduleDrawer } from "../../../components/CippComponents/CippNinjaCveSyncScheduleDrawer.jsx";
 import {
   Alert,
+  AlertTitle,
   Box,
   Button,
+  Card,
   CardContent,
+  Chip,
+  IconButton,
   Skeleton,
   Stack,
   Tab,
   Tabs,
   Typography,
 } from "@mui/material";
+import { Delete, PlayArrow, Schedule, Sync } from "@mui/icons-material";
 import CippIntegrationSettings from "../../../components/CippIntegrations/CippIntegrationSettings";
 import { Layout as DashboardLayout } from "../../../layouts/index.js";
 import { useForm } from "react-hook-form";
@@ -17,11 +21,13 @@ import { useSettings } from "../../../hooks/use-settings";
 import { ApiGetCall } from "../../../api/ApiCall";
 import { useRouter } from "next/router";
 import extensions from "../../../data/Extensions.json";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ArrowPathIcon, ArrowTopRightOnSquareIcon, BeakerIcon } from "@heroicons/react/24/outline";
 import { SvgIcon } from "@mui/material";
-import { useState } from "react";
 import { CippApiResults } from "../../../components/CippComponents/CippApiResults";
+import { CippApiDialog } from "../../../components/CippComponents/CippApiDialog";
+import { CippTimeAgo } from "../../../components/CippComponents/CippTimeAgo";
+import { useDialog } from "../../../hooks/use-dialog";
 import CippPageCard from "../../../components/CippCards/CippPageCard";
 import CippIntegrationTenantMapping from "../../../components/CippIntegrations/CippIntegrationTenantMapping";
 import CippIntegrationFieldMapping from "../../../components/CippIntegrations/CippIntegrationFieldMapping";
@@ -91,7 +97,127 @@ const Page = () => {
     defaultValues: integrations?.data,
   });
 
-  const extension = extensions.find((extension) => extension.id === router.query.id) || {};
+  const extension = extensions.find((ext) => ext.id === router.query.id) || {};
+
+  const removeDialog = useDialog();
+  const runNowDialog = useDialog();
+  const [selectedTask, setSelectedTask] = useState(null);
+
+  const ninjaCveSyncTasks = ApiGetCall({
+    url: "/api/ListScheduledItems",
+    data: {
+      showHidden: true,
+      Type: "Invoke-CIPPScheduledNinjaCveSync",
+    },
+    queryKey: "NinjaCveSyncTasks",
+    enabled: router.query.id === "NinjaOne",
+  });
+
+  const ninjaTasks = Array.isArray(ninjaCveSyncTasks.data) ? ninjaCveSyncTasks.data : [];
+
+  const NinjaCveSyncCard = () => (
+    <Box sx={{ mt: 3 }}>
+      <Card variant="outlined">
+        <CardContent>
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+            <Typography variant="h6" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Schedule color="primary" />
+              NinjaOne CVE Sync Tasks
+            </Typography>
+            <IconButton onClick={ninjaCveSyncTasks.refetch} size="small" title="Refresh">
+              <Sync />
+            </IconButton>
+          </Box>
+
+          {ninjaCveSyncTasks.isFetching ? (
+            <Stack spacing={2}>
+              <Skeleton variant="rectangular" height={60} />
+              <Skeleton variant="rectangular" height={60} />
+            </Stack>
+          ) : ninjaTasks.length === 0 ? (
+            <Alert severity="info">
+              <AlertTitle>No CVE Sync Tasks</AlertTitle>
+              No NinjaOne CVE sync tasks are currently scheduled. Enable "Automated CVE Sync" in
+              the settings above and save to create tasks for your mapped tenants.
+            </Alert>
+          ) : (
+            <Stack spacing={2}>
+              {ninjaTasks.map((task) => (
+                <Card key={task.RowKey} variant="outlined">
+                  <CardContent sx={{ py: 1.5, "&:last-child": { pb: 1.5 } }}>
+                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <Box>
+                        <Typography variant="subtitle2" fontWeight="medium">
+                          {task.Tenant?.value ?? task.Tenant ?? "Unknown Tenant"}
+                        </Typography>
+                        <Stack direction="row" spacing={1} sx={{ mt: 0.5 }}>
+                          <Chip
+                            label={`Every ${task.Recurrence}`}
+                            size="small"
+                            color="primary"
+                            variant="outlined"
+                          />
+                          <Chip
+                            label={task.TaskState ?? "Planned"}
+                            size="small"
+                            color={task.TaskState === "Completed" ? "success" : "default"}
+                            variant="outlined"
+                          />
+                        </Stack>
+                        <Stack direction="row" spacing={2} sx={{ mt: 0.5 }}>
+                          <Typography variant="caption" color="text.secondary">
+                            Next run:{" "}
+                            {task.ScheduledTime ? (
+                              <CippTimeAgo data={task.ScheduledTime} />
+                            ) : (
+                              "Not scheduled"
+                            )}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            Last run:{" "}
+                            {task.ExecutedTime ? (
+                              <CippTimeAgo data={task.ExecutedTime} />
+                            ) : (
+                              "Never"
+                            )}
+                          </Typography>
+                        </Stack>
+                      </Box>
+                      <Stack direction="row" spacing={1}>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          startIcon={<PlayArrow />}
+                          onClick={() => {
+                            setSelectedTask(task);
+                            runNowDialog.handleOpen();
+                          }}
+                        >
+                          Run Now
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          color="error"
+                          startIcon={<Delete />}
+                          onClick={() => {
+                            setSelectedTask(task);
+                            removeDialog.handleOpen();
+                          }}
+                        >
+                          Remove
+                        </Button>
+                      </Stack>
+                    </Box>
+                  </CardContent>
+                </Card>
+              ))}
+            </Stack>
+          )}
+        </CardContent>
+      </Card>
+    </Box>
+  );
 
   var logo = extension?.logo;
   if (preferredTheme === "dark" && extension?.logoDark) {
@@ -243,11 +369,7 @@ const Page = () => {
                 <CippApiClientManagement />
               ) : (
                 <CippIntegrationSettings>
-                  {extension?.id === "NinjaOne" && (
-                    <Box sx={{ mt: 3 }}>
-                      <CippNinjaCveSyncScheduleDrawer />
-                    </Box>
-                  )}
+                  {extension?.id === "NinjaOne" && <NinjaCveSyncCard />}
                 </CippIntegrationSettings>
               )}
             </CippCardTabPanel>
@@ -265,6 +387,36 @@ const Page = () => {
           </Box>
         </CippPageCard>
       )}
+
+      <CippApiDialog
+        createDialog={removeDialog}
+        title="Remove NinjaOne CVE Sync Task"
+        api={{
+          type: "POST",
+          url: "/api/RemoveScheduledItem",
+          data: { ID: selectedTask?.RowKey },
+          confirmText: `Are you sure you want to remove the NinjaOne CVE sync task for ${
+            selectedTask?.Tenant?.value ?? selectedTask?.Tenant
+          }?`,
+        }}
+        relatedQueryKeys={["NinjaCveSyncTasks"]}
+        onSuccess={() => setTimeout(() => ninjaCveSyncTasks.refetch(), 2000)}
+      />
+
+      <CippApiDialog
+        createDialog={runNowDialog}
+        title="Run NinjaOne CVE Sync Now"
+        api={{
+          type: "POST",
+          url: "/api/AddScheduledItem",
+          data: { RowKey: selectedTask?.RowKey, RunNow: true },
+          confirmText: `Are you sure you want to run the NinjaOne CVE sync now for ${
+            selectedTask?.Tenant?.value ?? selectedTask?.Tenant
+          }?`,
+        }}
+        relatedQueryKeys={["NinjaCveSyncTasks"]}
+        onSuccess={() => setTimeout(() => ninjaCveSyncTasks.refetch(), 2000)}
+      />
     </>
   );
 };
