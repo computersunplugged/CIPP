@@ -352,12 +352,17 @@ export const nativeMenuItems = [
       },
       {
         title: "Reports",
-        permissions: ["Tenant.DeviceCompliance.*"],
+        permissions: ["Tenant.DeviceCompliance.*", "Security.Alert.*"],
         items: [
           {
             title: "Device Compliance",
             path: "/security/reports/list-device-compliance",
             permissions: ["Tenant.DeviceCompliance.*"],
+          },
+          {
+            title: "CVE Report",
+            path: "/security/reports/cve-report",
+            permissions: ["Security.Alert.*"],
           },
         ],
       },
