@@ -149,7 +149,7 @@ const Page = () => {
             <Stack spacing={1.5}>
               <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap">
                 <Chip
-                  label={`${ninjaTasks.length} tenant${ninjaTasks.length !== 1 ? "s" : ""} scheduled`}
+                  label="All mapped tenants"
                   color="success"
                   size="small"
                 />
@@ -168,8 +168,8 @@ const Page = () => {
                 )}
               </Stack>
               <Typography variant="caption" color="text.secondary">
-                To change schedule settings, update the CVE Sync fields above and save. To remove
-                all tasks, disable "Automated CVE Sync" above and save.
+                To change schedule settings, update the CVE Sync fields above and save. To remove,
+                disable "Automated CVE Sync" above and save.
               </Typography>
               <Box>
                 <Button
@@ -178,7 +178,7 @@ const Page = () => {
                   startIcon={<PlayArrow />}
                   onClick={runAllNowDialog.handleOpen}
                 >
-                  Run All Now
+                  Run Now
                 </Button>
               </Box>
             </Stack>
@@ -360,12 +360,12 @@ const Page = () => {
 
       <CippApiDialog
         createDialog={runAllNowDialog}
-        title="Run All CVE Syncs Now"
+        title="Run CVE Sync Now"
         api={{
           type: "POST",
           url: "/api/AddScheduledItem",
           data: ninjaTasks.length > 0 ? { RowKey: ninjaTasks[0].RowKey, RunNow: true } : {},
-          confirmText: `This will trigger the CVE sync immediately for all ${ninjaTasks.length} scheduled tenant(s). Each task will run at the next scheduler interval.`,
+          confirmText: "Are you sure you want to run the NinjaOne CVE sync now for all mapped tenants?",
         }}
         relatedQueryKeys={["NinjaCveSyncTasks"]}
         onSuccess={() => setTimeout(() => ninjaCveSyncTasks.refetch(), 2000)}
