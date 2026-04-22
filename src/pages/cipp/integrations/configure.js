@@ -1,19 +1,17 @@
 import {
   Alert,
-  AlertTitle,
   Box,
   Button,
   Card,
   CardContent,
   Chip,
-  IconButton,
   Skeleton,
   Stack,
   Tab,
   Tabs,
   Typography,
 } from "@mui/material";
-import { Delete, PlayArrow, Schedule, Sync } from "@mui/icons-material";
+import { PlayArrow, Schedule } from "@mui/icons-material";
 import CippIntegrationSettings from "../../../components/CippIntegrations/CippIntegrationSettings";
 import { Layout as DashboardLayout } from "../../../layouts/index.js";
 import { useForm } from "react-hook-form";
@@ -26,7 +24,6 @@ import { ArrowPathIcon, ArrowTopRightOnSquareIcon, BeakerIcon } from "@heroicons
 import { SvgIcon } from "@mui/material";
 import { CippApiResults } from "../../../components/CippComponents/CippApiResults";
 import { CippApiDialog } from "../../../components/CippComponents/CippApiDialog";
-import { CippTimeAgo } from "../../../components/CippComponents/CippTimeAgo";
 import { useDialog } from "../../../hooks/use-dialog";
 import CippPageCard from "../../../components/CippCards/CippPageCard";
 import CippIntegrationTenantMapping from "../../../components/CippIntegrations/CippIntegrationTenantMapping";
@@ -100,92 +97,38 @@ const Page = () => {
     defaultValues: integrations?.data,
   });
 
-  const extension = extensions.find((ext) => ext.id === router.query.id) || {};
+  const extension = extensions.find((extension) => extension.id === router.query.id) || {};
 
   const runAllNowDialog = useDialog();
-
-  const ninjaCveSyncTasks = ApiGetCall({
-    url: "/api/ListScheduledItems",
-    data: {
-      showHidden: true,
-      Type: "Invoke-CIPPScheduledNinjaCveSync",
-    },
-    queryKey: "NinjaCveSyncTasks",
-    enabled: router.query.id === "NinjaOne",
-  });
-
-  const ninjaTasks = Array.isArray(ninjaCveSyncTasks.data) ? ninjaCveSyncTasks.data : [];
-
-  // Pick representative recurrence from first task — all tasks share the same recurrence
-  const recurrenceDisplay = ninjaTasks.length > 0 ? ninjaTasks[0].Recurrence : null;
-  const nextRun = ninjaTasks.length > 0 ? ninjaTasks[0].ScheduledTime : null;
-  const lastRun = ninjaTasks.length > 0
-    ? ninjaTasks.reduce((latest, t) => {
-        if (!t.ExecutedTime) return latest;
-        if (!latest) return t.ExecutedTime;
-        return new Date(t.ExecutedTime) > new Date(latest) ? t.ExecutedTime : latest;
-      }, null)
-    : null;
 
   const NinjaCveSyncCard = () => (
     <Box sx={{ px: 3, pb: 3 }}>
       <Card variant="outlined">
         <CardContent>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
-            <Typography variant="h6" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Schedule color="primary" />
-              CVE Sync Schedule
-            </Typography>
-            <IconButton onClick={ninjaCveSyncTasks.refetch} size="small" title="Refresh">
-              <Sync />
-            </IconButton>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.5 }}>
+            <Schedule color="primary" />
+            <Typography variant="h6">CVE Sync Schedule</Typography>
           </Box>
-
-          {ninjaCveSyncTasks.isFetching ? (
-            <Skeleton variant="rectangular" height={60} />
-          ) : ninjaTasks.length === 0 ? (
-            <Alert severity="info">
-              No CVE sync tasks scheduled. Enable "Automated CVE Sync" above and save to create
-              tasks for your mapped tenants.
-            </Alert>
-          ) : (
-            <Stack spacing={1.5}>
-              <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap">
-                <Chip
-                  label="All mapped tenants"
-                  color="success"
-                  size="small"
-                />
-                {recurrenceDisplay && (
-                  <Chip label={`Every ${recurrenceDisplay}`} size="small" variant="outlined" />
-                )}
-                {nextRun && (
-                  <Typography variant="caption" color="text.secondary">
-                    Next run: <CippTimeAgo data={nextRun} />
-                  </Typography>
-                )}
-                {lastRun && (
-                  <Typography variant="caption" color="text.secondary">
-                    Last run: <CippTimeAgo data={lastRun} />
-                  </Typography>
-                )}
-              </Stack>
-              <Typography variant="caption" color="text.secondary">
-                To change schedule settings, update the CVE Sync fields above and save. To remove,
-                disable "Automated CVE Sync" above and save.
-              </Typography>
-              <Box>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  startIcon={<PlayArrow />}
-                  onClick={runAllNowDialog.handleOpen}
-                >
-                  Run Now
-                </Button>
-              </Box>
+          <Stack spacing={1.5}>
+            <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap">
+              <Chip label="All mapped tenants" color="success" size="small" />
+              <Chip label="Daily with NinjaOne sync" size="small" variant="outlined" />
             </Stack>
-          )}
+            <Typography variant="caption" color="text.secondary">
+              CVE sync runs automatically as part of the daily NinjaOne synchronisation. To enable
+              or disable, use the "Automated CVE Sync" toggle above and save.
+            </Typography>
+            <Box>
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<PlayArrow />}
+                onClick={runAllNowDialog.handleOpen}
+              >
+                Run Now
+              </Button>
+            </Box>
+          </Stack>
         </CardContent>
       </Card>
     </Box>
@@ -385,11 +328,16 @@ const Page = () => {
         api={{
           type: "POST",
           url: "/api/AddScheduledItem",
-          data: ninjaTasks.length > 0 ? { RowKey: ninjaTasks[0].RowKey, RunNow: true } : {},
-          confirmText: "Are you sure you want to run the NinjaOne CVE sync now for all mapped tenants?",
+          data: {
+            Name: "CIPP NinjaCveSync - Run Now",
+            Command: { value: "Invoke-CIPPScheduledNinjaCveSync" },
+            Parameters: {},
+            ScheduledTime: Math.floor(Date.now() / 1000),
+            Recurrence: { value: "0" },
+          },
+          confirmText:
+            "Are you sure you want to run the NinjaOne CVE sync now for all mapped tenants?",
         }}
-        relatedQueryKeys={["NinjaCveSyncTasks"]}
-        onSuccess={() => setTimeout(() => ninjaCveSyncTasks.refetch(), 2000)}
       />
     </>
   );
