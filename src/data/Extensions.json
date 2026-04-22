@@ -527,18 +527,6 @@
         "compareType": "is",
         "compareValue": true
       }
-    },
-    {
-      "type": "number",
-      "name": "NinjaOne.CveSyncHours",
-      "label": "CVE Sync Frequency (hours)",
-      "placeholder": "24",
-      "helperText": "How often to sync CVE data (recommended: 24 hours for daily sync)",
-      "condition": {
-        "field": "NinjaOne.CveSyncEnabled",
-        "compareType": "is",
-        "compareValue": true
-      }
     }
   ],
   "mappingRequired": true,
