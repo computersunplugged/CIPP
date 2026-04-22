@@ -4,14 +4,12 @@ import {
   Button,
   Card,
   CardContent,
-  Chip,
   Skeleton,
   Stack,
   Tab,
   Tabs,
   Typography,
 } from "@mui/material";
-import { Schedule } from "@mui/icons-material";
 import CippIntegrationSettings from "../../../components/CippIntegrations/CippIntegrationSettings";
 import { Layout as DashboardLayout } from "../../../layouts/index.js";
 import { useForm } from "react-hook-form";
@@ -97,28 +95,6 @@ const Page = () => {
 
   const extension = extensions.find((extension) => extension.id === router.query.id) || {};
 
-  const NinjaCveSyncCard = () => (
-    <Box sx={{ px: 3, pb: 3 }}>
-      <Card variant="outlined">
-        <CardContent>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.5 }}>
-            <Schedule color="primary" />
-            <Typography variant="h6">CVE Sync Schedule</Typography>
-          </Box>
-          <Stack spacing={1.5}>
-            <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap">
-              <Chip label="All mapped tenants" color="success" size="small" />
-              <Chip label="Daily with NinjaOne sync" size="small" variant="outlined" />
-            </Stack>
-            <Typography variant="caption" color="text.secondary">
-              CVE sync runs automatically as part of the daily NinjaOne synchronisation. To enable
-              or disable, use the "Automated CVE Sync" toggle above and save.
-            </Typography>
-          </Stack>
-        </CardContent>
-      </Card>
-    </Box>
-  );
 
   var logo = extension?.logo;
   if (preferredTheme === "dark" && extension?.logoDark) {
@@ -289,7 +265,6 @@ const Page = () => {
               ) : (
                 <>
                   <CippIntegrationSettings />
-                  {extension?.id === "NinjaOne" && <NinjaCveSyncCard />}
                 </>
               )}
             </CippCardTabPanel>
