@@ -11,7 +11,7 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import { PlayArrow, Schedule } from "@mui/icons-material";
+import { Schedule } from "@mui/icons-material";
 import CippIntegrationSettings from "../../../components/CippIntegrations/CippIntegrationSettings";
 import { Layout as DashboardLayout } from "../../../layouts/index.js";
 import { useForm } from "react-hook-form";
@@ -23,8 +23,6 @@ import { useEffect, useState } from "react";
 import { ArrowPathIcon, ArrowTopRightOnSquareIcon, BeakerIcon } from "@heroicons/react/24/outline";
 import { SvgIcon } from "@mui/material";
 import { CippApiResults } from "../../../components/CippComponents/CippApiResults";
-import { CippApiDialog } from "../../../components/CippComponents/CippApiDialog";
-import { useDialog } from "../../../hooks/use-dialog";
 import CippPageCard from "../../../components/CippCards/CippPageCard";
 import CippIntegrationTenantMapping from "../../../components/CippIntegrations/CippIntegrationTenantMapping";
 import CippIntegrationFieldMapping from "../../../components/CippIntegrations/CippIntegrationFieldMapping";
@@ -99,8 +97,6 @@ const Page = () => {
 
   const extension = extensions.find((extension) => extension.id === router.query.id) || {};
 
-  const runAllNowDialog = useDialog();
-
   const NinjaCveSyncCard = () => (
     <Box sx={{ px: 3, pb: 3 }}>
       <Card variant="outlined">
@@ -118,16 +114,6 @@ const Page = () => {
               CVE sync runs automatically as part of the daily NinjaOne synchronisation. To enable
               or disable, use the "Automated CVE Sync" toggle above and save.
             </Typography>
-            <Box>
-              <Button
-                size="small"
-                variant="outlined"
-                startIcon={<PlayArrow />}
-                onClick={runAllNowDialog.handleOpen}
-              >
-                Run Now
-              </Button>
-            </Box>
           </Stack>
         </CardContent>
       </Card>
@@ -322,23 +308,6 @@ const Page = () => {
         </CippPageCard>
       )}
 
-      <CippApiDialog
-        createDialog={runAllNowDialog}
-        title="Run CVE Sync Now"
-        api={{
-          type: "POST",
-          url: "/api/AddScheduledItem",
-          data: {
-            Name: "CIPP NinjaCveSync - Run Now",
-            Command: { value: "Invoke-CIPPScheduledNinjaCveSync" },
-            Parameters: {},
-            ScheduledTime: Math.floor(Date.now() / 1000),
-            Recurrence: { value: "0" },
-          },
-          confirmText:
-            "Are you sure you want to run the NinjaOne CVE sync now for all mapped tenants?",
-        }}
-      />
     </>
   );
 };
