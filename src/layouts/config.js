@@ -124,7 +124,7 @@ export const nativeMenuItems = [
             permissions: ['Identity.User.*'],
           },
           {
-            title: 'AAD Connect Report',
+            title: 'Microsoft Entra Connect Report',
             path: '/identity/reports/azure-ad-connect-report',
             permissions: ['Identity.User.*'],
           },
@@ -283,6 +283,11 @@ export const nativeMenuItems = [
           {
             title: 'Graph / Office Reports',
             path: '/tenant/reports/graph-office-reports',
+            permissions: ['Tenant.Reports.*'],
+          },
+          {
+            title: 'Custom Test Report',
+            path: '/tenant/reports/custom-test-report',
             permissions: ['Tenant.Reports.*'],
           },
         ],
@@ -548,6 +553,7 @@ export const nativeMenuItems = [
             title: 'Application Templates',
             path: '/endpoint/applications/templates',
             permissions: ['Endpoint.Application.*'],
+            scope: 'global',
           },
         ],
       },
@@ -689,6 +695,21 @@ export const nativeMenuItems = [
         title: 'SharePoint',
         path: '/teams-share/sharepoint',
         permissions: ['Sharepoint.Admin.*'],
+      },
+      {
+        title: 'Deleted Sites',
+        path: '/teams-share/deleted-sites',
+        permissions: ['Sharepoint.Admin.*'],
+      },
+      {
+        title: 'Sharing Report',
+        path: '/teams-share/sharing-report',
+        permissions: ['Sharepoint.Site.*'],
+      },
+      {
+        title: 'External Users',
+        path: '/teams-share/external-users',
+        permissions: ['Sharepoint.Site.*'],
       },
       {
         title: 'Teams',
