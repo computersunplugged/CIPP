@@ -201,6 +201,25 @@ const Page = () => {
                         {u.templateName ?? u.templateId}
                       </Link>
                     </TableCell>
+                    <TableCell>
+                      {u.matchType === 'package' ? (
+                        <Tooltip title={`Included via package tag "${u.package}"`} arrow>
+                          <Chip
+                            label={u.package}
+                            size="small"
+                            color="warning"
+                            icon={<LocalOffer style={{ fontSize: 14 }} />}
+                          />
+                        </Tooltip>
+                      ) : (
+                        <Tooltip
+                          title="This template is directly referenced by GUID in the standards template"
+                          arrow
+                        >
+                          <Chip label="Direct" size="small" variant="outlined" />
+                        </Tooltip>
+                      )}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
