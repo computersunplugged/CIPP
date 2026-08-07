@@ -232,7 +232,7 @@ const Page = () => {
     size: 'lg',
   }
 
-  const simpleColumns = ['Apps']
+  const simpleColumns = ['displayName', 'isSynced', 'package', 'description', 'Type', 'usage']
 
   const filterList = [
     {
