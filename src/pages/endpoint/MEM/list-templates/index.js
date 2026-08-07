@@ -232,7 +232,7 @@ const Page = () => {
     size: 'lg',
   }
 
-  const simpleColumns = ['package']
+  const simpleColumns = ['Apps']
 
   const filterList = [
     {
